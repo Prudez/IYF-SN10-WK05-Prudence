@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>To-Do App</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.todo-app {
+    background: white;
+    padding: 20px;
+    width: 400px;
+    border-radius: 8px;
+}
+
+/* Input */
+#taskInput {
+    width: 70%;
+    padding: 10px;
+}
+
+#addBtn {
+    padding: 10px;
+}
+
+/* List */
+li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+/* Completed */
+.completed span {
+    text-decoration: line-through;
+    color: gray;
+}
+
+/* Delete button */
+.delete-btn {
+    display: none;
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+li:hover .delete-btn {
+    display: block;
+}
+
+/* Filters */
+.filters button {
+    margin: 5px;
+}
+
+.active-filter {
+    font-weight: bold;
+}
+
+/* Stats */
+.footer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+</style>
+</head>
+
+<body>
+
+<div class="todo-app">
+    <h2>To-Do List</h2>
+
+    <!-- Add Task -->
+    <input type="text" id="taskInput" placeholder="Add a task">
+    <button id="addBtn">Add</button>
+
+    <!-- Task List -->
+    <ul id="taskList"></ul>
+
+    <!-- Filters -->
+    <div class="filters">
+        <button data-filter="all" class="active-filter">All</button>
+        <button data-filter="active">Active</button>
+        <button data-filter="completed">Completed</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="footer">
+        <span id="itemsLeft">0 items left</span>
+        <button id="clearCompleted">Clear Completed</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

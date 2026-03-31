@@ -208,3 +208,153 @@ resetBtn.addEventListener("click", () => {
     count = 0;
     updateDisplay();
 });
+
+
+// ===== TASK 10.2: Event Objects =====
+const form = document.querySelector("form");
+
+document.addEventListener("keydown", function(event) {
+    
+    if (event.ctrlKey && event.key === "s") {
+        event.preventDefault();
+        alert("Saved!");
+    }
+
+    if (event.key === "Escape") {
+        const inputs = document.querySelectorAll("input, textarea");
+        inputs.forEach(input => input.value = "");
+    }
+
+    if (event.ctrlKey && event.key === "Enter") {
+        event.preventDefault();
+        if (form) {
+            form.submit();
+        }
+    }
+});
+
+
+// ===== TASK 10.3: Event Bubbling & Delegation =====
+const form = document.getElementById("taskForm");
+const input = document.getElementById("taskInput");
+const list = document.getElementById("taskList");
+
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const text = input.value.trim();
+    if (text === "") return;
+
+    const li = document.createElement("li");
+    li.classList.add("item");
+
+    li.innerHTML = `
+        <span class="task-text">${text}</span>
+        <button class="delete-btn">X</button>
+    `;
+
+    list.appendChild(li);
+    input.value = "";
+});
+
+list.addEventListener("click", function(event) {
+
+    if (event.target.classList.contains("delete-btn")) {
+        event.target.parentElement.remove();
+        return;
+    }
+
+});
+
+
+// ===== TASK 10.4: Form Handling =====
+const form = document.getElementById("contact-form");
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+
+nameInput.addEventListener("input", function(event) {
+    const value = event.target.value;
+
+    if (value.length < 2) {
+        showError(nameInput, "Name must be at least 2 characters");
+    } else {
+        clearError(nameInput);
+    }
+});
+
+emailInput.addEventListener("input", function(event) {
+    const value = event.target.value;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(value)) {
+        showError(emailInput, "Please enter a valid email");
+    } else {
+        clearError(emailInput);
+    }
+});
+
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+
+    console.log("Form data:", data);
+
+    if (isValid(data)) {
+        showSuccess("Form submitted successfully!");
+        form.reset();
+    }
+});
+
+function isValid(data) {
+    let valid = true;
+
+    if (data.name.length < 2) {
+        showError(nameInput, "Name must be at least 2 characters");
+        valid = false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email)) {
+        showError(emailInput, "Please enter a valid email");
+        valid = false;
+    }
+
+    return valid;
+}
+
+function showError(input, message) {
+    input.classList.add("error");
+
+    let error = input.nextElementSibling;
+
+    if (!error || !error.classList.contains("error-message")) {
+        error = document.createElement("div");
+        error.classList.add("error-message");
+        input.parentNode.insertBefore(error, input.nextSibling);
+    }
+
+    error.textContent = message;
+}
+
+function clearError(input) {
+    input.classList.remove("error");
+
+    const error = input.nextElementSibling;
+    if (error && error.classList.contains("error-message")) {
+        error.remove();
+    }
+}
+
+function showSuccess(message) {
+    let success = document.querySelector(".success-message");
+
+    if (!success) {
+        success = document.createElement("div");
+        success.classList.add("success-message");
+        form.appendChild(success);
+    }
+
+    success.textContent = message;
+}
